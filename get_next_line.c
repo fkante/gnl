@@ -24,6 +24,16 @@ int	ft_size_of_file(int fd)
 
 }
 
+int	ft_find_the_line(int ligne_a_chercher)
+{
+	static int index_ligne;
+	
+	index_ligne = 0;
+	while (index_ligne != '\n' && index_ligne != ligne_a_chercher)
+	       index_ligne++;
+	return (index_ligne);	
+}
+
 int	get_next_line(const int fd, char **line)
 {
 	return (0);
