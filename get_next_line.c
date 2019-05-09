@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/05/08 10:43:46 by fkante            #+#    #+#             */
+/*   Updated: 2019/05/09 10:59:09 by fkante           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h> 
 #include "libft.h"
 
@@ -11,40 +23,42 @@
 
 #define BUF_SIZE_1 1
 
-int	ft_size_of_file(int fd)
+static int		ft_find_the_newline(int fd)
 {
-	int	size_file;
+	int		index_newline;
 	char	buf[BUF_SIZE_1 + 1];
 
-	size_file = 0;
+	index_newline = 0;
 	while (read(fd, buf, BUF_SIZE_1))
-		size_file++;
-	printf("size of the file = %d\n", size_file);
+	{
+		index_newline++;
+		if (buf == "\n")
+		{
+			printf("size of the file = %d\n", index_newline);
+			return (0);
+		}
+	}
+	printf("size of the file = %d\n", index_newline);
 	return (0);
-
 }
 
-int	ft_find_the_line(int ligne_a_chercher)
+static int		ft_find_the_line(char **line_to_find)
 {
-	static int index_ligne;
+	static int line_index;
 	
-	index_ligne = 0;
-	while (index_ligne != '\n' && index_ligne != ligne_a_chercher)
-	       index_ligne++;
-	return (index_ligne);	
+	line_index = 0;
+	printf("pointeur sur char line = %p\n", *line_to_find);
+	while (ft_strcmp(*line_to_find, "\n"))
+	{
+		line_index++;
+		*line_to_find++;
+	}
+	return (line_index);
 }
 
-int	get_next_line(const int fd, char **line)
+int		get_next_line(const int fd, char **line)
 {
-	return (0);
-}
-
-int	main(int ac, char **av)
-{
-	int fd;
-	if (ac == 1)
-		return (0);
-	fd = open(av[1], O_RDWR);
-	ft_size_of_file(fd);
+	ft_find_the_newline(fd);
+	ft_find_the_line(line);
 	return (0);
 }

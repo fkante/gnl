@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_fibonacci.c                                     :+:      :+:    :+:   */
+/*   ft_size_of_file.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/26 09:18:51 by fkante            #+#    #+#             */
-/*   Updated: 2019/04/26 09:19:20 by fkante           ###   ########.fr       */
+/*   Created: 2019/05/08 15:57:02 by fkante            #+#    #+#             */
+/*   Updated: 2019/05/08 15:59:02 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_fibonacci(int index)
+/*
+** includes for linux needed for Open, Read and Write 
+*/
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#define BUF_SIZE_1 1
+
+int		ft_size_of_file(int fd)
 {
-	if (index < 0)
-		return (-1);
-	if (index == 0)
-		return (0);
-	if (index == 1)
-		return (1);
-	return (ft_fibonacci(index - 1) + ft_fibonacci(index - 2));
+	int		size_file;
+	char	buf[BUF_SIZE_1 + 1];
+
+	size_file = 0;
+	while (read(fd, buf, BUF_SIZE_1))
+		size_file++;
+	return (size_file);
 }
