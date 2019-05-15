@@ -6,7 +6,7 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 10:43:46 by fkante            #+#    #+#             */
-/*   Updated: 2019/05/15 14:29:45 by fkante           ###   ########.fr       */
+/*   Updated: 2019/05/15 15:37:21 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#define BUF_SIZE 20
+#define BUF_SIZE 100
 
 
 /*
  ** function test to find the newline, to be implemented in strcmp
  */
-static int		ft_strcmp_onechar(const char s1, const char s2)
+static int		strcmp_onechar(const char s1, const char s2)
 {
 	if (s1 == s2)
 		return (0);
@@ -35,21 +35,22 @@ static int		ft_strcmp_onechar(const char s1, const char s2)
 		return ((unsigned char)s1 - (unsigned char)s2);
 }
 
-static char		*ft_store_the_line(int fd)
+static char		*store_the_line(int fd)
 {
-	static char		buf[BUF_SIZE + 1];
-	static int	buff_index;
-	int			cpy_index;
+	char		buf[BUF_SIZE + 1];
 	char		*one_line;
+	int			cpy_index;
+	static int	buff_index;
 
 	buff_index = buff_index;
+	//	printf("buff_index: %d\tBUF_SIZE: %d\n", buff_index, BUF_SIZE);
+	//	printf("read %zd\n", read(fd, buf, BUF_SIZE));
 	if (read(fd, buf, BUF_SIZE))
 	{
 		while (buff_index < BUF_SIZE)
 		{
 			//printf("ft_strcmp: %d\n", ft_strcmp(&buf[buff_index], "\n"));
-			//printf("one_line: %c\n", one_line[buff_index]);
-			if (ft_strcmp_onechar(buf[buff_index] , '\n') == 0)
+			if (strcmp_onechar(buf[buff_index] , '\n') == 0)
 			{
 				if(!(one_line = (char*)malloc(buff_index + 1 * sizeof(char))))
 					return (0);
@@ -61,21 +62,26 @@ static char		*ft_store_the_line(int fd)
 				}
 				one_line[buff_index] = '\0';
 				buff_index++;
+				printf("buff_index:%d\n", buff_index);
 				return (one_line);
 			}
 			buff_index++;
 		}
 	}
-	return (ft_store_the_line(fd));
+	return (NULL);
 }
 
 int		get_next_line(const int fd, char **line)
 {
+	int		nb_line;
 	int		test_index = 0;
 
-	while (test_index < 2)
+	if(!(line = (char**)malloc(1000 * sizeof(char*))))
+		return (0);
+	while (test_index < 5)
 	{
-		printf("line:%s\n", ft_store_the_line(fd));
+		*line = store_the_line(fd);
+		printf("line[%d]:%s\n", test_index, *line++);
 		test_index++;
 	}
 	return (0);
