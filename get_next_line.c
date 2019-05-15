@@ -6,7 +6,7 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 10:43:46 by fkante            #+#    #+#             */
-/*   Updated: 2019/05/09 14:02:09 by fkante           ###   ########.fr       */
+/*   Updated: 2019/05/15 14:29:45 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,47 +23,60 @@
 
 #define BUF_SIZE 20
 
-static int		ft_find_the_newline(int fd)
-{
-	int			index_newline;
-	char		buf[BUF_SIZE + 1];
-	const char	newline = 10;
 
-	int buff_scanner = 0;
-	index_newline = 0;
-	while (read(fd, buf, BUF_SIZE))
-	{
-		while (buff_scanner < BUF_SIZE)
-		{
-			printf("strcmp: %d\n", ft_strcmp(&buf[buff_scanner] , newline));
-			if (ft_strcmp(&buf[buff_scanner] , "\n") == 0)
-				printf("buf = %c\n", buf[buff_scanner]);
-			buff_scanner++;
-		}
-		index_newline++;
-	}
-	printf("index_newline = %d\n", index_newline);
-	printf("buff_scanner = %d\n", buff_scanner);
-	return (0);
+/*
+ ** function test to find the newline, to be implemented in strcmp
+ */
+static int		ft_strcmp_onechar(const char s1, const char s2)
+{
+	if (s1 == s2)
+		return (0);
+	else
+		return ((unsigned char)s1 - (unsigned char)s2);
 }
 
-static int		ft_find_the_line(char **line_to_find)
+static char		*ft_store_the_line(int fd)
 {
-	static int line_index;
+	static char		buf[BUF_SIZE + 1];
+	static int	buff_index;
+	int			cpy_index;
+	char		*one_line;
 
-	line_index = 0;
-	printf("pointeur sur char line = %p\n", *line_to_find);
-	while (ft_strcmp(*line_to_find, "\n"))
+	buff_index = buff_index;
+	if (read(fd, buf, BUF_SIZE))
 	{
-		line_index++;
-		//		*line_to_find++;
+		while (buff_index < BUF_SIZE)
+		{
+			//printf("ft_strcmp: %d\n", ft_strcmp(&buf[buff_index], "\n"));
+			//printf("one_line: %c\n", one_line[buff_index]);
+			if (ft_strcmp_onechar(buf[buff_index] , '\n') == 0)
+			{
+				if(!(one_line = (char*)malloc(buff_index + 1 * sizeof(char))))
+					return (0);
+				cpy_index = 0;
+				while (cpy_index < buff_index)
+				{
+					one_line[cpy_index] = buf[cpy_index];
+					cpy_index++;
+				}
+				one_line[buff_index] = '\0';
+				buff_index++;
+				return (one_line);
+			}
+			buff_index++;
+		}
 	}
-	return (line_index);
+	return (ft_store_the_line(fd));
 }
 
 int		get_next_line(const int fd, char **line)
 {
-	ft_find_the_newline(fd);
-	//	ft_find_the_line(line);
+	int		test_index = 0;
+
+	while (test_index < 2)
+	{
+		printf("line:%s\n", ft_store_the_line(fd));
+		test_index++;
+	}
 	return (0);
 }
