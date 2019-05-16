@@ -6,7 +6,7 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 10:43:46 by fkante            #+#    #+#             */
-/*   Updated: 2019/05/15 18:39:49 by fkante           ###   ########.fr       */
+/*   Updated: 2019/05/16 16:53:37 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,26 @@ static int		find_the_newline(const char s1, const char s2)
 		return ((unsigned char)s1 - (unsigned char)s2);
 }
 
+static char		*store_the_rest_of_the_buffer(char *buffer, int buff_index)
+{
+	static char	*str_after_newline;
+	int			cpy_index;
+
+	cpy_index = 0;
+	if(!(str_after_newline = (char*)malloc((BUF_SIZE - buff_index) + 1 * sizeof(char))))
+		return (0);
+	while (buff_index < BUF_SIZE)
+	{
+		str_after_newline[cpy_index] = *buffer++;
+		cpy_index++;
+		buff_index++;
+	}
+	str_after_newline[cpy_index] = '\0';
+//	printf("str_after_newline: %s\n", str_after_newline);
+	return (str_after_newline);
+}
+
+
 static char		*return_the_line(int fd)
 {
 	char			buf[BUF_SIZE + 1];
@@ -38,6 +58,7 @@ static char		*return_the_line(int fd)
 	static int		buff_index;
 	static char		*str_until_newline;
 	static char		*str_after_newline;
+	char		*str_full;
 
 	buff_index = buff_index;
 	if (read(fd, buf, BUF_SIZE))
@@ -56,17 +77,13 @@ static char		*return_the_line(int fd)
 				}
 				cpy_index = 0;
 				str_until_newline[buff_index] = '\0';
+				str_after_newline = store_the_rest_of_the_buffer(&buf[buff_index], buff_index);
+				str_full = ft_strjoin(str_until_newline, str_after_newline);
 			}
-			/************************************************/
-			if(!(str_after_newline = (char*)malloc(buff_index + 1 * sizeof(char))))
-				return (0);
-			str_after_newline[cpy_index] = buf[buff_index];
-			/************************************************/
 			buff_index++;
 		}
-				buff_index = 0;
-				printf("str_after_newline:%s\n", str_after_newline);
-				return (str_until_newline);
+		buff_index = 0;
+		return (str_until_newline);
 	}
 	return (NULL);
 }
