@@ -6,11 +6,15 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 16:04:57 by fkante            #+#    #+#             */
-/*   Updated: 2019/05/17 18:37:23 by fkante           ###   ########.fr       */
+/*   Updated: 2019/05/23 15:51:00 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
+
+int				strrest_with_newline(char **line, char **str_rest);
+ssize_t			read_buffer(const int fd, char **line, char **str_rest);
 
 int		strrest_with_newline(char **line, char **str_rest)
 {
@@ -37,7 +41,7 @@ int		strrest_with_newline(char **line, char **str_rest)
 	return (1);
 }
 
-ssize_t		read_buffer(const int fd, char **line, char **str_rest)
+ssize_t	read_buffer(const int fd, char **line, char **str_rest)
 {
 	char		buff[BUFF_SIZE + 1];
 	char		*newline_position;
@@ -47,9 +51,8 @@ ssize_t		read_buffer(const int fd, char **line, char **str_rest)
 	while ((read_return = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[read_return] = '\0';
-		newline_position = ft_strchr(buff, '\n');
 		leaks = *line;
-		if (newline_position == NULL)
+		if ((newline_position = ft_strchr(buff, '\n')) == NULL)
 		{
 			*line = ft_strjoin(*line, buff);
 			ft_strdel(&leaks);
@@ -73,6 +76,7 @@ int		get_next_line(const int fd, char **line)
 
 	if (fd < 0 || line == NULL)
 		return (-1);
+	*line = NULL;
 	if (strrest_with_newline(line, &str_rest) == 1)
 		return (1);
 	return ((int)read_buffer(fd, line, &str_rest));
