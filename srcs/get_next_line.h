@@ -16,6 +16,11 @@
 # define BUFF_SIZE 1024
 
 # include "libft/libft.h"
+/*
+ ** here is two great reading to understand:
+ ** file descriptors: http://www.bottomupcs.com/file_descriptors.xhtml
+ ** heap and stack: http://stackoverflow.com/a/1213360
+ */
 
 int		get_next_line(const int fd, char **line);
 
