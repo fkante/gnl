@@ -6,15 +6,11 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 16:04:57 by fkante            #+#    #+#             */
-/*   Updated: 2019/05/23 15:51:00 by fkante           ###   ########.fr       */
+/*   Updated: 2019/06/28 11:17:36 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
-
-int				strrest_with_newline(char **line, char **str_rest);
-ssize_t			read_buffer(const int fd, char **line, char **str_rest);
 
 int		strrest_with_newline(char **line, char **str_rest)
 {
@@ -72,12 +68,15 @@ ssize_t	read_buffer(const int fd, char **line, char **str_rest)
 
 int		get_next_line(const int fd, char **line)
 {
-	static char	*str_rest;
+	static char	*str_rest[MAX_FD];
 
 	if (fd < 0 || line == NULL)
 		return (-1);
-	*line = NULL;
-	if (strrest_with_newline(line, &str_rest) == 1)
-		return (1);
-	return ((int)read_buffer(fd, line, &str_rest));
+	if (str_rest[fd] == NULL || str_rest[fd][0] == '\0')
+		if (*line)
+			*line = NULL;
+	if (str_rest[fd])
+		if (strrest_with_newline(line, &str_rest[fd]) == 1)
+			return (1);
+	return ((int)read_buffer(fd, line, &str_rest[fd]));
 }

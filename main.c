@@ -6,37 +6,38 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 10:47:17 by fkante            #+#    #+#             */
-/*   Updated: 2019/05/23 14:45:35 by fkante           ###   ########.fr       */
+/*   Updated: 2019/06/28 11:22:52 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "srcs/get_next_line.h"
 #include <stdio.h>
+#include <fcntl.h>
+#include <sys/uio.h>
+#include <sys/types.h>
 
-int		main(int ac, char **av)
+int    main(int argc, char const *argv[]) 
 {
-	char	*line;
-	int		fd;
-	int		count_lines;
-	char	*filename;
+	int fd;
+	int fd_2;
+	int i;
+	char *line;
+	int status;
 
-	line = NULL;
-	if (ac == 1)
-		return (1);
-	count_lines = 0;
-	filename = av[1];
-	fd = open(filename, O_RDONLY);
-	while (get_next_line(fd, &line) > 0)
+	fd = open(argv[1], O_RDONLY);
+	i = 1;
+	while ((status = get_next_line(fd, &line)) == 1 && i < 500)
 	{
-		count_lines++;
-		ft_putstr(line);
-		ft_putchar('\n');
-		if (count_lines > 50)
-			break;
+		printf("[%d] %s\n", i++, line);
+		free(line);
 	}
-/*	while (get_next_line(fd, &line) > 0)
-	{
-	}*/
+	fd_2 = open(argv[2], O_RDONLY);
 	close(fd);
-	return (0);
+	fd = fd_2;
+	while ((status = get_next_line(fd, &line)) == 1)
+	{
+		printf("[%d] %s\n", i++, line);
+		free(line);
+	}
+	return (argc);
 }
