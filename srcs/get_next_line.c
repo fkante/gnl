@@ -6,11 +6,17 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 16:04:57 by fkante            #+#    #+#             */
-/*   Updated: 2019/06/28 11:17:36 by fkante           ###   ########.fr       */
+/*   Updated: 2019/06/30 15:58:49 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+/*
+** ft_strdup allocates memory to store the copy, and returns a pointer to it
+** ft_strjoin allocates memory, concatenate s1 and s2 and returns a fresh
+** string ended by '\0'
+*/
 
 int		strrest_with_newline(char **line, char **str_rest)
 {
@@ -66,9 +72,17 @@ ssize_t	read_buffer(const int fd, char **line, char **str_rest)
 	return ((*line == NULL && *str_rest == NULL) ? 0 : 1);
 }
 
+/*
+** 1st: check for errors (empty line, number of the fd invalid)
+** 2nd: check if we have already data in our static var str_rest
+** 3rd: if str_rest exist, we resume from the position it had in the file
+**      if not, we read from the fd the specific nbr of bytes "BUFF_SIZE"
+** 4th: we concatenate what we have in the stack with what we read in the heap.
+*/
+
 int		get_next_line(const int fd, char **line)
 {
-	static char	*str_rest[MAX_FD];
+	static char	*str_rest[FD_LIMIT];
 
 	if (fd < 0 || line == NULL)
 		return (-1);

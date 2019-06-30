@@ -6,15 +6,15 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 17:22:56 by fkante            #+#    #+#             */
-/*   Updated: 2019/06/28 11:36:53 by fkante           ###   ########.fr       */
+/*   Updated: 2019/06/30 15:07:01 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# define BUFF_SIZE 1024
-# define MAX_FD 256 + 1
+# define BUFF_SIZE 104
+# define FD_LIMIT 256 + 1
 
 /*
 ** first type launchctl limit maxfiles:
