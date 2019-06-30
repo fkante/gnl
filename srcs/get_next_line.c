@@ -6,7 +6,7 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 16:04:57 by fkante            #+#    #+#             */
-/*   Updated: 2019/06/30 16:22:03 by fkante           ###   ########.fr       */
+/*   Updated: 2019/06/30 16:23:10 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ int		get_next_line(const int fd, char **line)
 	if (fd < 0 || line == NULL)
 		return (-1);
 	if (str_rest[fd] == NULL || str_rest[fd][0] == '\0')
-			*line = NULL;
+		*line = NULL;
 	if (strrest_with_newline(line, &str_rest[fd]) == 1)
-			return (1);
+		return (1);
 	return ((int)read_buffer(fd, line, &str_rest[fd]));
 }
