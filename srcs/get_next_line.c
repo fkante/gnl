@@ -6,7 +6,7 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 16:04:57 by fkante            #+#    #+#             */
-/*   Updated: 2019/06/30 15:58:49 by fkante           ###   ########.fr       */
+/*   Updated: 2019/06/30 16:22:03 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,9 @@ ssize_t	read_buffer(const int fd, char **line, char **str_rest)
 ** 2nd: check if we have already data in our static var str_rest
 ** 3rd: if str_rest exist, we resume from the position it had in the file
 **      if not, we read from the fd the specific nbr of bytes "BUFF_SIZE"
-** 4th: we concatenate what we have in the stack with what we read in the heap.
+** 4th: we concatenate what we have in the stack with what we read in the heap
+** here is another read on vm and heap:
+** https://blog.holbertonschool.com/hack-the-virtual-memory-c-strings-proc/
 */
 
 int		get_next_line(const int fd, char **line)
@@ -87,10 +89,8 @@ int		get_next_line(const int fd, char **line)
 	if (fd < 0 || line == NULL)
 		return (-1);
 	if (str_rest[fd] == NULL || str_rest[fd][0] == '\0')
-		if (*line)
 			*line = NULL;
-	if (str_rest[fd])
-		if (strrest_with_newline(line, &str_rest[fd]) == 1)
+	if (strrest_with_newline(line, &str_rest[fd]) == 1)
 			return (1);
 	return ((int)read_buffer(fd, line, &str_rest[fd]));
 }
