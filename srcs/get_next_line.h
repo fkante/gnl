@@ -6,7 +6,7 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 17:22:56 by fkante            #+#    #+#             */
-/*   Updated: 2019/06/30 15:07:01 by fkante           ###   ########.fr       */
+/*   Updated: 2019/07/01 08:54:56 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 ** if you have never been on this project, you may find below two great
 ** readings to understand the basic concepts:
 ** file descriptors: http://www.bottomupcs.com/file_descriptors.xhtml
+** french video on fd: https://www.youtube.com/watch?v=Bv0Nqt99qMI
 ** heap and stack: http://stackoverflow.com/a/1213360
 */
 
