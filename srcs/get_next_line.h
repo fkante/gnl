@@ -6,14 +6,14 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 17:22:56 by fkante            #+#    #+#             */
-/*   Updated: 2019/07/01 08:54:56 by fkante           ###   ########.fr       */
+/*   Updated: 2019/07/13 15:20:21 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# define BUFF_SIZE 104
+# define BUFF_SIZE 256
 # define FD_LIMIT 256 + 1
 
 /*

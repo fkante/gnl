@@ -3,65 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: student@42 <@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2013/12/01 22:10:06 by student@42        #+#    #+#             */
-/*   Updated: 2019/05/17 18:17:33 by fkante           ###   ########.fr       */
+/*   Created: 2019/07/13 16:18:56 by fkante            #+#    #+#             */
+/*   Updated: 2019/07/13 16:19:31 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "../srcs/get_next_line.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <fcntl.h>
-#include <string.h>
-#include <sys/wait.h>
+#include <sys/uio.h>
+#include <sys/types.h>
 
-int	get_next_line(int fd, char **line);
-
-int	main(int argc, char ** argv)
+int    main(int argc, char const *argv[]) 
 {
-	int		fd;
-	int		fd2;
-	char	*line;
-	pid_t	child;
-	char	n = '\n';
+	int fd;
+	int fd_2;
+	int i;
+	char *line;
+	int status;
 
-	if (argc < 2)
-	{
-		printf("Usage %s <filename>\n", argv[0]);
-		return (1);
-	}
 	fd = open(argv[1], O_RDONLY);
-	fd2 = open("me.txt", O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	if (fd == -1 || fd2 == -1)
+	i = 1;
+	while ((status = get_next_line(fd, &line)) == 1 && i < 500)
 	{
-		perror("open");
-		close(fd);
-		close(fd2);
-		return (-1);
+		printf("[%d] %s\n", i++, line);
+		free(line);
 	}
-	while (get_next_line(fd, &line) == 1)
-	{
-		write(fd2, line, strlen(line));
-		write(fd2, &n, 1);					// attention si le fichier test n a pas de \n et que ca affiche une erreur c'est normal
-		free(line);							// vous inquietez pas
-	}
+	fd_2 = open(argv[2], O_RDONLY);
 	close(fd);
-	close(fd2);
-	child = fork();
-	if (child == 0)
+	fd = fd_2;
+	while ((status = get_next_line(fd, &line)) == 1)
 	{
-		char	*arg[] = {"/usr/bin/diff", NULL, "me.txt", NULL};
-
-		arg[1] = argv[1];
-		execve(arg[0], arg, NULL);
-		exit(0);
+		printf("[%d] %s\n", i++, line);
+		free(line);
 	}
-	else
-		wait(NULL); // bad code I know ... but it's not the project
-	(void)argc;
-	(void)argv;
-	return (0);
+	return (argc);
 }
-
