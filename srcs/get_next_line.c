@@ -6,7 +6,7 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 16:04:57 by fkante            #+#    #+#             */
-/*   Updated: 2019/07/01 08:53:49 by fkante           ###   ########.fr       */
+/*   Updated: 2019/07/15 15:05:56 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int		strrest_with_newline(char **line, char **str_rest)
 	if (*(newline_position + 1) != '\0')
 		str_after_newline = ft_strdup(newline_position + 1);
 	*newline_position = '\0';
+	free(*line);
 	*line = ft_strdup(*str_rest);
 	ft_strdel(str_rest);
 	*str_rest = str_after_newline;

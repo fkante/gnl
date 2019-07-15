@@ -6,23 +6,38 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:18:56 by fkante            #+#    #+#             */
-/*   Updated: 2019/07/15 15:30:14 by fkante           ###   ########.fr       */
+/*   Updated: 2019/07/13 16:19:31 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "../srcs/get_next_line.h"
 #include <stdio.h>
 #include <fcntl.h>
 #include <sys/uio.h>
 #include <sys/types.h>
 
-int    main(void) 
+int    main(int argc, char const *argv[]) 
 {
+	int fd;
+	int fd_2;
+	int i;
 	char *line;
+	int status;
 
-	while (get_next_line(0, &line) != 0)
+	fd = open(argv[1], O_RDONLY);
+	i = 1;
+	while ((status = get_next_line(fd, &line)) == 1 && i < 500)
 	{
-		printf("%s\n", line);
+		printf("[%d] %s\n", i++, line);
+		free(line);
 	}
-	return (0);
+	fd_2 = open(argv[2], O_RDONLY);
+	close(fd);
+	fd = fd_2;
+	while ((status = get_next_line(fd, &line)) == 1)
+	{
+		printf("[%d] %s\n", i++, line);
+		free(line);
+	}
+	return (argc);
 }
