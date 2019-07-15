@@ -22,6 +22,7 @@ int		strrest_with_newline(char **line, char **str_rest)
 {
 	char	*newline_position;
 	char	*str_after_newline;
+	char	*leaks;
 
 	newline_position = NULL;
 	str_after_newline = NULL;
@@ -30,6 +31,7 @@ int		strrest_with_newline(char **line, char **str_rest)
 	newline_position = ft_strchr(*str_rest, '\n');
 	if (newline_position == NULL)
 	{
+		ft_strdel(line);
 		*line = ft_strdup(*str_rest);
 		ft_strdel(str_rest);
 		return (0);
@@ -37,7 +39,7 @@ int		strrest_with_newline(char **line, char **str_rest)
 	if (*(newline_position + 1) != '\0')
 		str_after_newline = ft_strdup(newline_position + 1);
 	*newline_position = '\0';
-	free(*line);
+	ft_strdel(line);
 	*line = ft_strdup(*str_rest);
 	ft_strdel(str_rest);
 	*str_rest = str_after_newline;

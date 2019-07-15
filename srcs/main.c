@@ -16,13 +16,18 @@
 #include <sys/uio.h>
 #include <sys/types.h>
 
-int    main(void) 
+int    main(int ac, char **av) 
 {
 	char *line;
+	int  fd;
 
-	while (get_next_line(0, &line) != 0)
+	fd = open(av[1], O_RDONLY);
+	while (get_next_line(fd, &line) != 0)
 	{
-		printf("%s\n", line);
+		ft_putstr(line);
+		ft_putchar('\n');
+		//printf("%s\n", line);
 	}
+	close(fd);
 	return (0);
 }
