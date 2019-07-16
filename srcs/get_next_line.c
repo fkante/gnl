@@ -6,7 +6,7 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 16:04:57 by fkante            #+#    #+#             */
-/*   Updated: 2019/07/15 16:03:12 by fkante           ###   ########.fr       */
+/*   Updated: 2019/07/16 19:38:14 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,35 +18,32 @@
 ** string ended by '\0'
 */
 
-int		strrest_with_newline(char **line, char **str_rest)
+static int8_t	strrest_with_newline(char **line, char **str_rest)
 {
 	char	*newline_position;
 	char	*str_after_newline;
-	char	*leaks;
 
 	newline_position = NULL;
 	str_after_newline = NULL;
 	if (*str_rest == NULL)
-		return (0);
+		return (FAILURE);
 	newline_position = ft_strchr(*str_rest, '\n');
 	if (newline_position == NULL)
 	{
-		ft_strdel(line);
 		*line = ft_strdup(*str_rest);
 		ft_strdel(str_rest);
-		return (0);
+		return (FAILURE);
 	}
 	if (*(newline_position + 1) != '\0')
 		str_after_newline = ft_strdup(newline_position + 1);
 	*newline_position = '\0';
-	ft_strdel(line);
 	*line = ft_strdup(*str_rest);
 	ft_strdel(str_rest);
 	*str_rest = str_after_newline;
-	return (1);
+	return (SUCCESS);
 }
 
-ssize_t	read_buffer(const int fd, char **line, char **str_rest)
+static int		read_buffer(const int fd, char **line, char **str_rest)
 {
 	char		buff[BUFF_SIZE + 1];
 	char		*newline_position;
@@ -70,8 +67,8 @@ ssize_t	read_buffer(const int fd, char **line, char **str_rest)
 		ft_strdel(&leaks);
 		return (1);
 	}
-	if (read_return == -1)
-		return (-1);
+	if (read_return == FAILURE)
+		return (FAILURE);
 	return ((*line == NULL && *str_rest == NULL) ? 0 : 1);
 }
 
@@ -85,15 +82,15 @@ ssize_t	read_buffer(const int fd, char **line, char **str_rest)
 ** https://blog.holbertonschool.com/hack-the-virtual-memory-c-strings-proc/
 */
 
-int		get_next_line(const int fd, char **line)
+int				get_next_line(const int fd, char **line)
 {
 	static char	*str_rest[FD_LIMIT];
 
 	if (fd < 0 || line == NULL)
-		return (-1);
+		return (FAILURE);
 	if (str_rest[fd] == NULL || str_rest[fd][0] == '\0')
 		*line = NULL;
-	if (strrest_with_newline(line, &str_rest[fd]) == 1)
+	if (strrest_with_newline(line, &str_rest[fd]) == SUCCESS)
 		return (1);
-	return ((int)read_buffer(fd, line, &str_rest[fd]));
+	return (read_buffer(fd, line, &str_rest[fd]));
 }

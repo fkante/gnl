@@ -6,7 +6,7 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:18:56 by fkante            #+#    #+#             */
-/*   Updated: 2019/07/15 16:10:39 by fkante           ###   ########.fr       */
+/*   Updated: 2019/07/16 19:40:41 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,17 @@ int    main(int ac, char **av)
 {
 	char *line;
 	int  fd;
-
+	
+	if (ac == 0)
+		return (0);
 	fd = open(av[1], O_RDONLY);
-	while (get_next_line(fd, &line) != 0)
+	if (get_next_line(fd, &line) == -1)
+		printf("-1\n");
+	/*while (get_next_line(fd, &line) > 0)
 	{
-		ft_putstr(line);
-		ft_putchar('\n');
-		//printf("%s\n", line);
-	}
+		printf("%s\n", line);
+		ft_strdel(&line);
+	}*/
 	close(fd);
 	return (0);
 }
