@@ -6,12 +6,11 @@
 /*   By: fkante <fkante@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 16:04:57 by fkante            #+#    #+#             */
-/*   Updated: 2019/07/19 09:42:51 by fkante           ###   ########.fr       */
+/*   Updated: 2019/07/25 10:29:24 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 /*
 ** ft_strdup allocates memory to store the copy, and returns a pointer to it
@@ -84,27 +83,27 @@ static int		read_buffer(const int fd, char **line, char **str_rest)
 ** TO BE ADDED: Protection for the BUFF_SIZE max
 */
 
-/*int				get_next_line(const int fd, char **line)
+int				get_next_line(const int fd, char **line)
 {
 	static char	*str_rest[FD_LIMIT];
-	int		ret;
+	int		read_ret;
 
 	if (fd < 0 || fd > FD_LIMIT || line == NULL)
 		return (FAILURE);
 	if (strrest_with_newline(line, &str_rest[fd]) == SUCCESS)
 		return (1);
-	ret = read_buffer(fd, line, &str_rest[fd]);
-	if (ret != 0 || str_rest[fd] == NULL || str_rest[fd][0] == '\0')
+	read_ret = read_buffer(fd, line, &str_rest[fd]);
+	if (read_ret != 0 || str_rest[fd] == NULL || str_rest[fd][0] == '\0')
 	{
-		if (!ret && *line)
+		if (!read_ret && *line)
 			*line = NULL;
-		return (ret);
+		return (read_ret);
 	}
 	*line = str_rest[fd];
 	str_rest[fd] = NULL;
 	return (1);
 }
-*/
+/*
 int				get_next_line(const int fd, char **line)
 {
 	static char	*str_rest[FD_LIMIT];
@@ -116,4 +115,4 @@ int				get_next_line(const int fd, char **line)
 	if (strrest_with_newline(line, &str_rest[fd]) == SUCCESS)
 		return (1);
 	return (read_buffer(fd, line, &str_rest[fd]));
-}
+}*/
