@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: fkante <fkante@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 16:04:57 by fkante            #+#    #+#             */
-/*   Updated: 2019/07/16 19:38:14 by fkante           ###   ########.fr       */
+/*   Updated: 2019/07/19 09:42:51 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 /*
 ** ft_strdup allocates memory to store the copy, and returns a pointer to it
@@ -60,7 +61,7 @@ static int		read_buffer(const int fd, char **line, char **str_rest)
 			ft_strdel(&leaks);
 			continue ;
 		}
-		if (*(newline_position + 1) != '\0')
+		if (*(newline_position) != '\0')
 			*str_rest = ft_strdup(newline_position + 1);
 		*newline_position = '\0';
 		*line = ft_strjoin(*line, buff);
@@ -80,8 +81,30 @@ static int		read_buffer(const int fd, char **line, char **str_rest)
 ** 4th: we concatenate what we have in the stack with what we read in the heap
 ** here is another read on vm and heap:
 ** https://blog.holbertonschool.com/hack-the-virtual-memory-c-strings-proc/
+** TO BE ADDED: Protection for the BUFF_SIZE max
 */
 
+/*int				get_next_line(const int fd, char **line)
+{
+	static char	*str_rest[FD_LIMIT];
+	int		ret;
+
+	if (fd < 0 || fd > FD_LIMIT || line == NULL)
+		return (FAILURE);
+	if (strrest_with_newline(line, &str_rest[fd]) == SUCCESS)
+		return (1);
+	ret = read_buffer(fd, line, &str_rest[fd]);
+	if (ret != 0 || str_rest[fd] == NULL || str_rest[fd][0] == '\0')
+	{
+		if (!ret && *line)
+			*line = NULL;
+		return (ret);
+	}
+	*line = str_rest[fd];
+	str_rest[fd] = NULL;
+	return (1);
+}
+*/
 int				get_next_line(const int fd, char **line)
 {
 	static char	*str_rest[FD_LIMIT];

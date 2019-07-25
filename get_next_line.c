@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "srcs/get_next_line.h"
 #include <stdio.h>
 
 /*
@@ -61,17 +61,13 @@ static int		read_buffer(const int fd, char **line, char **str_rest)
 			ft_strdel(&leaks);
 			continue ;
 		}
-		else
-			*str_rest = ft_strdup(newline_position);
-		if (strrest_with_newline(line, str_rest))
-			break ;
-		/*if (*(newline_position) != '\0')
+		if (*(newline_position) != '\0')
 			*str_rest = ft_strdup(newline_position + 1);
 		*newline_position = '\0';
 		*line = ft_strjoin(*line, buff);
 		ft_strdel(&leaks);
 		return (1);
-*/	}
+	}
 	if (read_return == FAILURE)
 		return (FAILURE);
 	return ((*line == NULL && *str_rest == NULL) ? 0 : 1);
@@ -91,12 +87,34 @@ static int		read_buffer(const int fd, char **line, char **str_rest)
 int				get_next_line(const int fd, char **line)
 {
 	static char	*str_rest[FD_LIMIT];
+	int		ret;
 
-	if (fd < 0)
+	if (fd < 0 || fd > FD_LIMIT || line == NULL)
 		return (FAILURE);
-	if ((str_rest[fd] == NULL || str_rest[fd][0] == '\0') && *line)
+	if (strrest_with_newline(line, &str_rest[fd]) == SUCCESS)
+		return (1);
+	ret = read_buffer(fd, line, &str_rest[fd]);
+	if (ret != 0 || str_rest[fd] == NULL || str_rest[fd][0] == '\0')
+	{
+		if (!ret && *line)
+			*line = NULL;
+		return (ret);
+	}
+	*line = str_rest[fd];
+	str_rest[fd] = NULL;
+	return (1);
+}
+/*
+int				get_next_line(const int fd, char **line)
+{
+	static char	*str_rest[FD_LIMIT];
+
+	if (fd < 0 || line == NULL)
+		return (FAILURE);
+	if (str_rest[fd] == NULL || str_rest[fd][0] == '\0')
 		*line = NULL;
 	if (strrest_with_newline(line, &str_rest[fd]) == SUCCESS)
 		return (1);
 	return (read_buffer(fd, line, &str_rest[fd]));
 }
+*/
