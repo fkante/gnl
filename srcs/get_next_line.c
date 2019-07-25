@@ -6,7 +6,7 @@
 /*   By: fkante <fkante@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 16:04:57 by fkante            #+#    #+#             */
-/*   Updated: 2019/07/25 10:29:24 by fkante           ###   ########.fr       */
+/*   Updated: 2019/07/25 13:25:16 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int		read_buffer(const int fd, char **line, char **str_rest)
 			ft_strdel(&leaks);
 			continue ;
 		}
-		if (*(newline_position) != '\0')
+		if (*(newline_position) != '\0' + 1)
 			*str_rest = ft_strdup(newline_position + 1);
 		*newline_position = '\0';
 		*line = ft_strjoin(*line, buff);
@@ -82,18 +82,18 @@ static int		read_buffer(const int fd, char **line, char **str_rest)
 ** https://blog.holbertonschool.com/hack-the-virtual-memory-c-strings-proc/
 ** TO BE ADDED: Protection for the BUFF_SIZE max
 */
-
+/*
 int				get_next_line(const int fd, char **line)
 {
 	static char	*str_rest[FD_LIMIT];
-	int		read_ret;
+	int			read_ret;
 
 	if (fd < 0 || fd > FD_LIMIT || line == NULL)
 		return (FAILURE);
 	if (strrest_with_newline(line, &str_rest[fd]) == SUCCESS)
 		return (1);
 	read_ret = read_buffer(fd, line, &str_rest[fd]);
-	if (read_ret != 0 || str_rest[fd] == NULL || str_rest[fd][0] == '\0')
+	if (str_rest[fd] == NULL || str_rest[fd][0] == '\0')
 	{
 		if (!read_ret && *line)
 			*line = NULL;
@@ -103,16 +103,16 @@ int				get_next_line(const int fd, char **line)
 	str_rest[fd] = NULL;
 	return (1);
 }
-/*
+*/
 int				get_next_line(const int fd, char **line)
 {
 	static char	*str_rest[FD_LIMIT];
 
-	if (fd < 0 || line == NULL)
+	if (fd < 0 || fd > FD_LIMIT || line == NULL)
 		return (FAILURE);
 	if (str_rest[fd] == NULL || str_rest[fd][0] == '\0')
 		*line = NULL;
 	if (strrest_with_newline(line, &str_rest[fd]) == SUCCESS)
 		return (1);
 	return (read_buffer(fd, line, &str_rest[fd]));
-}*/
+}

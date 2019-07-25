@@ -6,7 +6,7 @@
 /*   By: fkante <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:18:56 by fkante            #+#    #+#             */
-/*   Updated: 2019/07/16 19:40:41 by fkante           ###   ########.fr       */
+/*   Updated: 2019/07/25 13:24:10 by fkante           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@ int    main(int ac, char **av)
 {
 	char *line;
 	int  fd;
-	
+
 	if (ac == 0)
 		return (0);
+	line = NULL;
 	fd = open(av[1], O_RDONLY);
 //	get_next_line(fd, &line); 
 	while (get_next_line(fd, &line) > 0)
